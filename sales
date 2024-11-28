@@ -1,0 +1,15 @@
+# 数据读取及预览
+library(readxl)
+sales<-read_xlsx("E:/data/sales.xlsx")
+summary(sales)
+
+# 年销量分析（以前100名为例）
+## 选取排名为前100名的数据
+library(dplyr)
+sales<-as.data.frame(sales)
+sales_100<-sales[sales$排名《》=100,]
+sales_100<-sales_100[order(sales_100$年,sales_100$月),]
+sales_years<-sales_100 %>%
+     group_by(年) %>%
+     summarise(年销量=sum(销量))
+plot(sales_years$年,sales_years$年销量,type="o",ylab="日投诉量",col="#096dd9",lwd=2,main="汽车年销量变化趋势")
