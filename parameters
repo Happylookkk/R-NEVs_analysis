@@ -1,0 +1,15 @@
+# 数据准备
+library(readxl)
+parameters<-read_xlsx("E:/data/parameters.xlsx")
+parameters<-as.data.frame(parameters)
+
+# 车辆级别对售价和销量的影响
+library(ggplot2)
+parameters_class<-parameters %>%
+     group_by(车辆级别) %>%
+     summarise(平均价格=mean(售价,na.rm=TRUE),总销量=n())
+ggplot(parameters_class,aes(x=车辆级别,y=平均价格,size=总销量,fill=factor(车辆级别)))+
+geom_point(alpha=.5,color="black",shape=21)+scale_size_continuous(range=c(1,10))+
+labs(title="不同车辆级别的平均价格和总销量",x="车辆级别",y="平均价格",size="总销量",fill="车辆级别")+
+theme_minimal()
+`结论：•	对于不同的车辆级别，显然跑车的价格最高，可以说是“一骑绝尘”。不同车辆级别的销量也有显著差异。例如，紧凑型车、紧凑型SUV、中型车、中型SUV、中大型SUV的销量相对较高，而皮卡、轻客、微卡、跑车的销量相对较低，这可能与它们的功能和价格有关。
