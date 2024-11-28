@@ -3,14 +3,57 @@ library(readxl)
 sales<-read_xlsx("E:/data/sales.xlsx")
 summary(sales)
 
-# 年销量分析（以前100名为例）
-## 选取排名为前100名的数据
+# 销量数据分析
+## 年销量分析（以前100名为例）
 library(dplyr)
 library(ggplot2)
 sales<-as.data.frame(sales)
-sales_100<-sales[sales$排名《》=100,]
-sales_100<-sales_100[order(sales_100$年,sales_100$月),]
+sales<-sales[order(sales$年,sales$月),]
+sales_100<-sales[sales$排名<=100,]
 sales_years<-sales_100 %>%
      group_by(年) %>%
      summarise(年销量=sum(销量))
 plot(sales_years$年,sales_years$年销量,type="o",ylab="日投诉量",col="#096dd9",lwd=2,main="汽车年销量变化趋势")
+·结论：汽车月销量销量从2021年到2022年呈现显著的增长趋势，从2023年到2024年销量，销量有所下降，但总体呈现出显著的增长趋势。
+
+## 月销量分析
+sales_months<-sales_100 %>%
+     group_by(月) %>%
+     summarise(月销量=sum(销量))
+sales_months$月<-factor(sales_months$月)
+sales_months$月销量<-as.numeric(sales_months$月销量)
+ggplot(sales_months,aes(x=月,y=月销量,fill=月销量))+geom_bar(stat = "identity")+scale_fill_continuous(low="lightblue1",high="dodgerblue4")
+·结论：汽车销售量在不同月份呈现出明显的季节性变化。一般来说，年底的几个月（例如11月和12月）销量较高，这可能与年底购车需求增加、节假日促销活动等因素有关。而年初的几个月（例如2月和3月）销量较低，可能受到消费者预算限制或新年假期的影响。
+
+## 厂商市场份额分析
+sales_manu<-sales_100 %>%
+     group_by(厂商) %>%
+     summarise(总销量=sum(销量))
+sales_manu$总销量<-as.numeric(sales_manu$总销量)
+sales_manu$market<-sales_manu$总销量/sum(sales_manu$总销量)*100  # 计算市场份额
+sales_manu_order<-sales_manu[order(sales_manu$market,decreasing = TRUE),]  
+head(sales_manu_order,20)  #查看市场份额排名前二十的厂商
+·结果展示：
+# A tibble: 20 × 3
+   厂商          总销量 market
+   <chr>          <dbl>  <dbl>
+ 1 比亚迪       7615880  31.4 
+ 2 特斯拉中国   2150124   8.87
+ 3 上汽通用五菱 2134596   8.81
+ 4 上汽集团      774566   3.20
+ 5 理想          630578   2.60
+ 6 长安汽车      581432   2.40
+ 7 奇瑞新能源    564862   2.33
+ 8 蔚来          532599   2.20
+ 9 广汽埃安      490556   2.02
+10 北汽新能源    438764   1.81
+11 小鹏汽车      428821   1.77
+12 上汽大众      423997   1.75
+13 长城新能源    397346   1.64
+14 零跑汽车      342943   1.42
+15 理想汽车      333381   1.38
+16 极氪          329126   1.36
+17 合众汽车      323205   1.33
+18 长城汽车      312208   1.29
+19 赛力斯汽车    294200   1.21
+20 华晨宝马      277693   1.15
