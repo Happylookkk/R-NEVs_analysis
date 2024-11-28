@@ -6,6 +6,7 @@ summary(sales)
 # 年销量分析（以前100名为例）
 ## 选取排名为前100名的数据
 library(dplyr)
+library(ggplot2)
 sales<-as.data.frame(sales)
 sales_100<-sales[sales$排名《》=100,]
 sales_100<-sales_100[order(sales_100$年,sales_100$月),]
