@@ -1,19 +1,31 @@
+# 数据准备
 complaint<-read.csv("E:/data/complaint.csv")
 complaint<-as.data.frame(complaint)
 
-# 投诉量变化趋势
+# 投诉量日变化趋势
+library(dplyr)
+library(plotly)
+complaint_num$投诉日期<-factor(complaint_num$投诉日期)
 complaint_num<-complaint %>%
     group_by(投诉日期) %>%
     summarise(日投诉量=n())
-complaint_num$投诉日期<-as.Date(complaint_num$投诉日期)
-mean<-round(mean(complaint_num$日投诉量),2)
-max<-max(complaint_num$日投诉量)
-max1<-which.max(complaint_num$日投诉量)
-plot(complaint_num$投诉日期,complaint_num$日投诉量,type="l",xlab="时间",ylab="日投诉量",col="#096dd9",lwd=2,main="汽车投诉量日变化趋势")+
-abline(h=mean,col="chartreuse3",lty=2,lwd=1)+
-text(x=min(complaint_num$投诉日期),y=mean,labels=paste("平均投诉量",mean),pos=3,col="chartreuse3",adj=c(0,0.5))+
-points(complaint_num$投诉日期[47],complaint_num$日投诉量[max1],col="orangered")+text(x=complaint_num$投诉日期[47],y=complaint_num$日投诉量[max1],pos=3,labels="03-15 172案",col="orangered")
-·结论：
-三个月的汽车质量投诉中，2月上旬的投诉数量较少，此时正值春节假期，在家过节的车主较多，用车次数较少
-投诉次数最多的时间是3月15日，此时正是消费者权益保护日
-三个月的投诉量平均值为50.77案，在2月底至3月中下旬的大部分时间里投诉量都高于该值
+plot_ly(complaint_num,x=~投诉日期,y=~日投诉量,type="scatter",mode="lines")
+
+# 各月份总投诉次数占比
+library(lubridate)
+complaint$投诉日期<-as.Date(complaint$投诉日期)
+complaint_month<-complaint %>%
+    mutate(month=month(complaint$投诉日期)) %>%
+    group_by(month) %>%
+    summarise(月投诉量=n()) %>%
+    mutate(percentage=round(月投诉量/sum(月投诉量)*100,2))
+pie(complaint_month$percentage,labels=paste(complaint_month$month,"月\n",complaint_month$percentage,"%"),main="各月份总投诉次数占比",col=c("lightblue","orange","lightgreen","yellow"))
+
+# 被投诉次数TOP10的汽车厂商
+library(ggplot2)
+complaint_manu<-complaint %>%
+    group_by(投诉厂商) %>%
+    summarise(投诉次数=n())
+complaint_manu<-complaint_manu[order(complaint_manu$投诉次数,decreasing = T),]
+ggplot(complaint_manu[1:10,],aes(x=投诉厂商,y=投诉次数))+geom_bar(stat="identity")+scale_fill_continuous(low="lightblue1",high="steelblue4")+theme_minimal()+ggtitle("被投诉次数TOP10的汽车厂商")+coord_flip()
+
