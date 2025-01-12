@@ -1,10 +1,10 @@
-# 数据准备
+# 数据和包的准备
 library(readxl)
+library(ggplot2)
 parameters<-read_xlsx("E:/data/parameters.xlsx")
 parameters<-as.data.frame(parameters)
 
-# 车辆级别对售价和销量的影响
-library(ggplot2)
+# 车辆级别对售价和销量的影响（气泡图）
 parameters_class<-parameters %>%
      group_by(车辆级别) %>%
      summarise(平均价格=mean(售价,na.rm=TRUE),总销量=n())
