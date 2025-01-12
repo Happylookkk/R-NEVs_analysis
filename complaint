@@ -28,7 +28,11 @@ complaint_manu<-complaint %>%
     group_by(投诉厂商) %>%
     summarise(投诉次数=n())
 complaint_manu<-complaint_manu[order(complaint_manu$投诉次数,decreasing = T),]
-ggplot(complaint_manu[1:10,],aes(x=投诉厂商,y=投诉次数))+geom_bar(stat="identity")+scale_fill_continuous(low="lightblue1",high="steelblue4")+theme_minimal()+ggtitle("被投诉次数TOP10的汽车厂商")+coord_flip()
+ggplot(complaint_manu[1:10,],aes(x=投诉厂商,y=投诉次数))+
+    geom_bar(stat="identity")+
+    scale_fill_continuous(low="lightblue1",high="steelblue4")+
+    theme_minimal()+ggtitle("被投诉次数TOP10的汽车厂商")+
+    coord_flip()
 
 # 被投诉汽车厂商与车系之间的关系（树形图）
 complaint_brand<-complaint %>%
