@@ -24,3 +24,10 @@ ggplot(parameters_color,aes(x=车身颜色,y=销量,fill=销量))+
     ggtitle("被投诉次数TOP10的汽车厂商")+coord_flip()
 
 # 燃料类型占比
+parameters$燃料类型<-factor(parameters$燃料类型)
+parameters_fuel<-parameters %>%
+    group_by(燃料类型) %>%
+    summarise(销量=n()) %>%
+    mutate(percentage=round(销量/sum(销量)*100,2))
+pie(parameters_fuel$percentage,labels=paste(parameters_fuel$燃料类型,"\n",parameters_fuel$percentage,"%"),main="燃料类型数占比",col=c("lightblue","orange","lightgreen","yellow"))
+
