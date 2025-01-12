@@ -1,6 +1,7 @@
 # 数据和包的准备
 library(readxl)
 library(ggplot2)
+library(dplyr)
 parameters<-read_xlsx("E:/data/parameters.xlsx")
 parameters<-as.data.frame(parameters)
 
@@ -13,3 +14,4 @@ geom_point(alpha=.5,color="black",shape=21)+scale_size_continuous(range=c(1,10))
 labs(title="不同车辆级别的平均价格和总销量",x="车辆级别",y="平均价格",size="总销量",fill="车辆级别")+
 theme_minimal()
 
+# 车身颜色对销量的影响（条形图）
