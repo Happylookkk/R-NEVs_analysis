@@ -7,11 +7,20 @@ parameters<-as.data.frame(parameters)
 
 # 车辆级别对售价和销量的影响（气泡图）
 parameters_class<-parameters %>%
-     group_by(车辆级别) %>%
-     summarise(平均价格=mean(售价,na.rm=TRUE),总销量=n())
+    group_by(车辆级别) %>%
+    summarise(平均价格=mean(售价,na.rm=TRUE),总销量=n())
 ggplot(parameters_class,aes(x=车辆级别,y=平均价格,size=总销量,fill=factor(车辆级别)))+
-geom_point(alpha=.5,color="black",shape=21)+scale_size_continuous(range=c(1,10))+
-labs(title="不同车辆级别的平均价格和总销量",x="车辆级别",y="平均价格",size="总销量",fill="车辆级别")+
-theme_minimal()
+    geom_point(alpha=.5,color="black",shape=21)+scale_size_continuous(range=c(1,10))+
+    labs(title="不同车辆级别的平均价格和总销量",x="车辆级别",y="平均价格",size="总销量",fill="车辆级别")+
+    theme_minimal()
 
 # 车身颜色对销量的影响（条形图）
+parameters_color<-parameters %>%
+    group_by(车身颜色) %>%
+    summarise(销量=n())
+ggplot(parameters_color,aes(x=车身颜色,y=销量,fill=销量))+
+    geom_bar(stat="identity")+
+    scale_fill_continuous(low="lightblue1",high="steelblue4")+theme_minimal()+
+    ggtitle("被投诉次数TOP10的汽车厂商")+coord_flip()
+
+# 燃料类型占比
