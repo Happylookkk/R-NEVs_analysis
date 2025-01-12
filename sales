@@ -14,7 +14,6 @@ sales_years<-sales_100 %>%
      group_by(年) %>%
      summarise(年销量=sum(销量))
 plot(sales_years$年,sales_years$年销量,type="o",ylab="日投诉量",col="#096dd9",lwd=2,main="汽车年销量变化趋势")
-·结论：汽车月销量销量从2021年到2022年呈现显著的增长趋势，从2023年到2024年销量，销量有所下降，但总体呈现出显著的增长趋势。
 
 ## 月销量分析
 sales_months<-sales_100 %>%
@@ -22,8 +21,9 @@ sales_months<-sales_100 %>%
      summarise(月销量=sum(销量))
 sales_months$月<-factor(sales_months$月)
 sales_months$月销量<-as.numeric(sales_months$月销量)
-ggplot(sales_months,aes(x=月,y=月销量,fill=月销量))+geom_bar(stat = "identity")+scale_fill_continuous(low="lightblue1",high="dodgerblue4")
-·结论：汽车销售量在不同月份呈现出明显的季节性变化。一般来说，年底的几个月（例如11月和12月）销量较高，这可能与年底购车需求增加、节假日促销活动等因素有关。而年初的几个月（例如2月和3月）销量较低，可能受到消费者预算限制或新年假期的影响。
+ggplot(sales_months,aes(x=月,y=月销量,fill=月销量))+
+    geom_bar(stat = "identity")+
+    scale_fill_continuous(low="lightblue1",high="dodgerblue4")
 
 ## 厂商市场份额分析
 sales_manu<-sales_100 %>%
