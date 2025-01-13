@@ -3,8 +3,7 @@ library(readxl)
 sales<-read_xlsx("E:/data/sales.xlsx")
 summary(sales)
 
-# 销量数据分析
-## 年销量分析（以前100名为例）
+# 年销量分析（以前100名为例）
 library(dplyr)
 library(ggplot2)
 sales<-as.data.frame(sales)
@@ -15,7 +14,7 @@ sales_years<-sales_100 %>%
      summarise(年销量=sum(销量))
 plot(sales_years$年,sales_years$年销量,type="o",ylab="日投诉量",col="#096dd9",lwd=2,main="汽车年销量变化趋势")
 
-## 月销量分析
+# 月销量分析
 sales_months<-sales_100 %>%
      group_by(月) %>%
      summarise(月销量=sum(销量))
@@ -25,7 +24,7 @@ ggplot(sales_months,aes(x=月,y=月销量,fill=月销量))+
     geom_bar(stat = "identity")+
     scale_fill_continuous(low="lightblue1",high="dodgerblue4")
 
-## 厂商市场份额分析
+# 厂商市场份额分析
 sales_manu<-sales_100 %>%
      group_by(厂商) %>%
      summarise(总销量=sum(销量))
