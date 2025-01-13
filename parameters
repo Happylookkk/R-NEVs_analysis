@@ -30,5 +30,3 @@ parameters_fuel<-parameters %>%
     summarise(销量=n()) %>%
     mutate(percentage=round(销量/sum(销量)*100,2))
 pie(parameters_fuel$percentage,labels=paste(parameters_fuel$燃料类型,"\n",parameters_fuel$percentage,"%"),main="燃料类型数占比",col=c("lightblue","orange","lightgreen","yellow"))
-
-# 车辆级别对价格和销量的影响（箱线图、小提琴图）
